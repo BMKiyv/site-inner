@@ -9,9 +9,11 @@
     border: 1px solid var(--main-color);
     outline: none;
     border-radius: 50%;
+    margin-bottom: 10px;
     width: 33px;
     height: 33px;
     background-color: transparent;
+    color: var(--black);
     display: block;
     position: relative;
   }
@@ -77,6 +79,7 @@
     background-color: rgba(255,164,39, 0.2);
     border-radius: 50%;
   }
+
   
   .day + #currentDay {
     background-color: var(--hilight);
@@ -103,7 +106,7 @@
     box-shadow: 0px 0px 3px black;
     border-radius: 5px;
     width: 350px;
-    top: 100px;
+    top: 300px;
     left: calc(50% - 175px);
     position: absolute;
     font-family: sans-serif;
@@ -122,10 +125,14 @@
     border: 2px solid red;
   }
   #cancelButton, #deleteButton {
-    background-color: #d36c6c;
+    background-color: var(--hilight);
+    width: 100px;
+    border-radius: 5px;
   }
   #saveButton, #closeButton {
-    background-color: #92a1d1;
+    background-color: var(--second-color);
+    width: 100px;
+    border-radius: 5px;
   }
   #eventText {
     font-size: 14px;
@@ -137,7 +144,7 @@
     z-index: 10;
     width: 100vw;
     height: 100vh;
-    position: absolute;
+    position: fixed;
     background-color: rgba(0,0,0,0.8);
   }
   #monthDisplay{

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\EventsController;
+use App\Http\Controllers\Departments\DepartmentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +17,9 @@ use App\Http\Controllers\Home\HomeController;
 */
 
 Route::get('/', [HomeController::class,'index'])->name('first');
+
+Route::get('/getevents',[EventsController::class,'getEvents']);
+Route::post('/postevents',[EventsController::class,'postEvents']);
+Route::delete('/events/{date}',[EventsController::class,'destroy']);
+
+Route::resource('/departments', DepartmentsController::class);

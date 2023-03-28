@@ -2,33 +2,40 @@ import './bootstrap';
 
 let nav = 0;
 let clicked = null;
-let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
-
+let events = [];
+let location = document.location.pathname
+console.log(location !== '/');
+let newEvent = {};
+const _token = document.querySelector('meta[name="csrf-token"]')
 const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
 const deleteEventModal = document.getElementById('deleteEventModal');
 const backDrop = document.getElementById('modalBackDrop');
 const eventTitleInput = document.getElementById('eventTitleInput');
-const eventsList = document.getElementsByClassName('events-list')[0];
-const weekdays = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday'];
-const monthArray = ['січня', 'лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня']
-console.log(events)
+let eventsList = document.getElementsByClassName('events-list')[0];
+const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const monthArray = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня']
 function openModal(date) {
   clicked = date;
 
   const eventForDay = events.find(e => e.date === clicked);
 
   if (eventForDay) {
-    //document.getElementById('eventText').innerText = eventForDay.title;
-    //deleteEventModal.style.display = 'block';
+    console.log(eventForDay,clicked.substring(8, 10));
+    let deleteDateMonth = document.getElementsByClassName('deleteDateMonth')[0]
+    let deleteDateDay = document.getElementsByClassName('deleteDateDay')[0]
+    deleteDateMonth.innerHTML = monthArray[clicked.substring(5, 7)-1]
+    deleteDateDay.innerHTML = clicked.substring(8,10)
+    document.getElementById('eventText').innerText = eventForDay.title;
+    deleteEventModal.style.display = 'block';
   } else {
     newEventModal.style.display = 'block';
+    newEvent.date = clicked;
   }
-  console.log(date);
-  //backDrop.style.display = 'block';
+  backDrop.style.display = 'block';
 }
 
-function load() {
+function load(nav) {
   const dt = new Date();
 
   if (nav !== 0) {
@@ -41,7 +48,7 @@ function load() {
 
   const firstDayOfMonth = new Date(year, month, 1);
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  
+
   const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
     weekday: 'long',
     year: 'numeric',
@@ -49,22 +56,23 @@ function load() {
     day: 'numeric',
   });
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
+  renderEvents(nav);
 
-  document.getElementById('monthDisplay').innerText = 
+  document.getElementById('monthDisplay').innerText =
     `${dt.toLocaleDateString('uk-UA', { month: 'long' })} ${year}`;
 
   calendar.innerHTML = '';
 
-  for(let i = 1; i <= paddingDays + daysInMonth; i++) {
+  for (let i = 1; i <= paddingDays + daysInMonth; i++) {
     const daySquare = document.createElement('div');
     daySquare.classList.add('day');
 
-    const dayString = `${month + 1}/${i - paddingDays}/${year}`;
+    const dayString = i - paddingDays > 9 ? `${year}-0${month + 1}-${i - paddingDays}` : `${year}-0${month + 1}-0${i - paddingDays}`;
 
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
       const eventForDay = events.find(e => e.date === dayString);
-
+      //console.log(i - paddingDays,paddingDays);
       if (i - paddingDays === day && nav === 0) {
         daySquare.id = 'currentDay';
       }
@@ -72,7 +80,7 @@ function load() {
       if (eventForDay) {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event');
-       // eventDiv.innerText = eventForDay.title;
+        // eventDiv.innerText = eventForDay.title;
         daySquare.appendChild(eventDiv);
       }
 
@@ -81,7 +89,7 @@ function load() {
       daySquare.classList.add('indent');
     }
 
-    calendar.appendChild(daySquare);    
+    calendar.appendChild(daySquare);
   }
 }
 
@@ -92,7 +100,8 @@ function closeModal() {
   backDrop.style.display = 'none';
   eventTitleInput.value = '';
   clicked = null;
-  load();
+  load(nav);
+  renderEvents(nav);
 }
 
 function saveEvent() {
@@ -103,29 +112,49 @@ function saveEvent() {
       date: clicked,
       title: eventTitleInput.value,
     });
-
-    localStorage.setItem('events', JSON.stringify(events));
-    closeModal();
+    let dataForPosting = JSON.stringify({ ...newEvent, 'title': eventTitleInput.value });
+    console.log(dataForPosting)
+    localStorage.setItem('events',dataForPosting); 
+    closeModal()
+    renderEvents(nav)
+    postData(dataForPosting)
   } else {
     eventTitleInput.classList.add('error');
   }
 }
 
-function deleteEvent() {
+ function deleteEvent() {
+
+  let deletEdevent = events.filter(e => e.date == clicked);
+  let _date = deletEdevent[0].date
+  console.log(_date,deletEdevent);
+  fetch(`/events/${_date}`, {
+    method: 'DELETE',
+        headers: {
+      "Content-Type": "application/json",
+      'X-CSRF-TOKEN': _token.getAttribute('content'),
+      "Accept": "application/json, text-plain, */*",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+  })
   events = events.filter(e => e.date !== clicked);
+  
   localStorage.setItem('events', JSON.stringify(events));
+  renderEvents(nav);
   closeModal();
 }
 
 function initButtons() {
   document.getElementById('nextButton').addEventListener('click', () => {
     nav++;
-    load();
+    load(nav);
+    renderEvents(nav);
   });
 
   document.getElementById('backButton').addEventListener('click', () => {
     nav--;
-    load();
+    load(nav);
+    renderEvents(nav)
   });
 
   document.getElementById('saveButton').addEventListener('click', saveEvent);
@@ -134,28 +163,128 @@ function initButtons() {
   document.getElementById('closeButton').addEventListener('click', closeModal);
 }
 
-initButtons();
-load();
-window.onload = (e)=>{
+async function getData() {
+  const response = await fetch('/getevents')
+  const result = await response.json()
+  return result;
+}
 
-  let arrevents = events;
-  console.log(events);
-    arrevents.forEach(item=>{
-      let month = item.date.split('/')[0];
-      let day = item.date.split('/')[1];
-      let year = item.date.split('/')[2];
-      if(arrevents.length>0){
-        let dateEvent = document.createElement('div');
-        let titleEvent = document.createElement('div');
+getData().then((res) => {
+  //console.log(res)
+  const dt = new Date().toLocaleString();
+  let loadingEvents = []
+  for (let i = 0; i < res.length; i++) {
+
+    let data = { 'date': res[i].date, 'title': res[i].title }
+    loadingEvents.push(data)
+  }
+  if (events.length === 0) {
+    events = [...loadingEvents]
+    localStorage.setItem('events', JSON.stringify(events));
+  }
+  let list = events.filter((item) => item.date.substring(5, 7) == dt.substring(3, 5))
+  return list
+})
+
+async function postData(data) {
+  console.log(data);
+  await fetch('/postevents', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      'X-CSRF-TOKEN': _token.getAttribute('content'),
+      "Accept": "application/json, text-plain, */*",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    body: JSON.stringify(data)
+
+  })
+.then((res)=>{
+  res.json()
+})
+.then(answer=>console.log(answer))
+}
+
+function renderEvents(nav) {
+  const dt = new Date().toLocaleString();
+  let monthLink = +dt.substring(3, 5) + nav > 9 ? (+dt.substring(3, 5) + nav).toString() : `0${(+dt.substring(3, 5) + nav).toString()}`;
+  let arrevents = events.filter((item) => item.date.substring(5, 7) == monthLink)
+  .sort((curr,next)=>{
+    if(curr.date>next.date) return 1;
+    if(curr.date<next.date) return -1;
+    return 0
+  });
+  if (eventsList.hasChildNodes()) {
+
+    let eventsParent = eventsList.parentNode;
+    eventsParent.removeChild(eventsList)
+    let element = document.createElement('div');
+    element.classList.add('events-list');
+    eventsList = element
+    eventsParent.appendChild(eventsList)
+
+    arrevents.forEach(item => {
+      let month = item.date.split('-')[1];
+      let day = item.date.split('-')[2];
+      let reverseDate = dt.split('.')
+      reverseDate[2] = reverseDate[2].substring(4,-1)
+
+      if (arrevents.length > 0) {
+        let eventContainer = document.createElement('div');
+        let dateEvent = document.createElement('span');
+        let monthEvent = document.createElement('span');
+        let titleEvent = document.createElement('span');
+        eventContainer.classList.add('date-container')
         dateEvent.classList.add('date')
         titleEvent.classList.add('title')
-        dateEvent.innerHTML = `${day} ${monthArray[month-1]} ${year}`;
+        monthEvent.classList.add('month')
+        dateEvent.innerHTML = `${day}`;
+        monthEvent.innerHTML = `${monthArray[month - 1]}`;
         titleEvent.innerHTML = item.title;
-        eventsList.appendChild(dateEvent);
-        eventsList.appendChild(titleEvent)
+        eventsList.appendChild(eventContainer);
+        eventContainer.appendChild(dateEvent);
+        eventContainer.appendChild(monthEvent);
+        eventContainer.appendChild(titleEvent);
+        if(reverseDate.reverse().join('-')===item.date){
+          eventContainer.style.fontWeight = 'bold'
+        }
+      }
+      console.log(reverseDate.reverse().join('-'),item.date);
+    })
+    if (arrevents.length == 0) {
+      let titleEvent = document.createElement('div');
+      titleEvent.classList.add('withoutEvents')
+      titleEvent.innerHTML = 'В цьому місяці немає подій'
+      eventsList.appendChild(titleEvent)
+    }
+  }
+  else {
+    arrevents.forEach(item => {
+      let month = item.date.split('-')[1];
+      let day = item.date.split('-')[2];
+      let reverseDate = dt.split('.')
+      if (arrevents.length > 0) {
+        let eventContainer = document.createElement('div');
+        let dateEvent = document.createElement('span');
+        let monthEvent = document.createElement('span');
+        let titleEvent = document.createElement('span');
+        eventContainer.classList.add('date-container')
+        dateEvent.classList.add('date')
+        titleEvent.classList.add('title')
+        monthEvent.classList.add('month')
+        dateEvent.innerHTML = `${day}`;
+        monthEvent.innerHTML = `${monthArray[month - 1]}`;
+        titleEvent.innerHTML = item.title;
+        eventsList.appendChild(eventContainer);
+        eventContainer.appendChild(dateEvent);
+        eventContainer.appendChild(monthEvent);
+        eventContainer.appendChild(titleEvent);
+        if(reverseDate.reverse().join('-')===item.date){
+          eventContainer.style.fontWeight = 'bold'
+        }
       }
       else {
-        
+
         let titleEvent = document.createElement('div');
         titleEvent.classList.add('title')
         titleEvent.innerHTML = 'time without events'
@@ -163,4 +292,59 @@ window.onload = (e)=>{
       }
     })
   }
+
+}
+
+window.onload = () => {
+  let container = document.getElementsByClassName('birthdays')[0];
+  let overload = document.getElementsByClassName('birthday');
+  let birthdayMonth = document.getElementsByClassName('birthday-month');
+  let birthdayDay = document.getElementsByClassName('birthday-day');
+  let birthDayName =  document.getElementsByClassName('user');
+  let newsDate = document.getElementsByClassName('news-date');
+
+  let birthdaysArray = [];
+  for (let i=0; i<birthdayMonth.length;i++){
+    let printBirtdayMonth = birthdayMonth[i].innerHTML.split('-').slice(1, 2).join('')
+    let printBirtdayDay = birthdayMonth[i].innerHTML.split('-').slice(2, 3).join('')
+    let obj = {'month':printBirtdayMonth,'name':birthDayName[i].innerHTML, 'day':printBirtdayDay}
+    birthdaysArray.push(obj)
+  }
+  birthdaysArray.sort((curr,next)=>{
+    if(curr.month>next.month ) return 1;
+    if( curr.month === next.month){
+     return curr.day<next.day?  -1: 1;
+    } 
+    if(curr.month<next.month) return -1;
+    return 0
+  })
+  //console.log(birthdaysArray);
+  for (let i=0; i<birthdaysArray.length;i++){
+    if(i<3){
+      //console.log(birthDayName[i]);
+      birthdayMonth[i].innerHTML = monthArray[birthdaysArray[i].month-1]
+      birthdayDay[i].innerHTML = birthdaysArray[i].day
+      birthDayName[i].innerHTML = birthdaysArray[i].name
+    }
+    if(i===3){
+      for(let j = birthDayName.length; j>3; j--){
+       // console.log(birthDayName[j]);
+        container.removeChild(overload[j-1])
+      } 
+    }
+  }
+
+  for (let item of newsDate){
+    let content = item.innerHTML;
+    item.innerHTML = content.split('-').reverse().join('.')
+  }
+  
+  if(location === '/'){
+    initButtons();
+    getData()
+    load(nav)
+    renderEvents(nav)
+  }
+
+}
 
