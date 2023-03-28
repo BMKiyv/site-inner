@@ -55,7 +55,7 @@
           </div>
       </div>
   </section>
-  <section class="flex">
+  <section class="flex" id="news">
     <div class="news">
       <div class="news-wrap">
         <div class="news-content">
@@ -68,10 +68,10 @@
             @endforeach
         </div>
       </div>
-      <a href="#" class="news-link"></a>
+      <a href="/news" class="news-link"></a>
     </div>
   </section>
-  <section class="next">
+  <section class="next" id="departments">
     <div class="container">
       <div class="next-flex">
       @foreach($user as $item)

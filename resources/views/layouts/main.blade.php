@@ -20,9 +20,9 @@
         <a href="/"><img class="logo" src="/images/logo.svg" alt="logo"></a>
         <nav class="navigation">
             <a href="" class="nav-item"><span>Документи</span></a>
-            <a href="" class="nav-item"><span>Відділи</span></a>
+            <a href="/#departments" class="nav-item"><span>Відділи</span></a>
             <a href="" class="nav-item"><span>Проекти</span></a>
-            <a href="" class="nav-item"><span>Новини / оголошення</span></a>
+            <a href="/#news" class="nav-item"><span>Новини / оголошення</span></a>
             <a href="" class="nav-item"><span>Інше</span></a>
             <a href="" class="nav-button"><span>Кабінет</span></a>
         </nav>
