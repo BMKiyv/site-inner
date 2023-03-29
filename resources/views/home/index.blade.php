@@ -74,16 +74,18 @@
   <section class="next" id="departments">
     <div class="container">
       <div class="next-flex">
-      @foreach($user as $item)
-        @if($item->position==='голова')
+
         <div class="management">
           <div class="management-heading">
             Керівний склад Державного агентства розвитку туризму:
           </div>
+          @foreach($user as $item)
+          @if($item->position!=='главспец')
           <div class="management-name">{{$item->name}} - <span>{{$item->position}}</span></div>
+          @endif
+          @endforeach
         </div>
-        @endif
-      @endforeach
+
       <div class="departments-wrap">
       @foreach($departments as $item)
       <div class="departments">
