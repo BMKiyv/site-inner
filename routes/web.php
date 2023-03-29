@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\Departments\DepartmentsController;
+use App\Http\Controllers\News\NewsController;
+use App\Http\Controllers\Projects\ProjectsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +24,7 @@ Route::get('/getevents',[EventsController::class,'getEvents']);
 Route::post('/postevents',[EventsController::class,'postEvents']);
 Route::delete('/events/{date}',[EventsController::class,'destroy']);
 
+
 Route::resource('/departments', DepartmentsController::class);
+Route::resource('/news', NewsController::class);
+Route::resource('/projects', ProjectsController::class);

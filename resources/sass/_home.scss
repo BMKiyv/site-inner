@@ -33,12 +33,14 @@ section{
 .navigation{
     display: flex;
     align-items: center;
+    position: relative;
 }
 .nav-item{
     margin-left: 40px;
     text-decoration: none;
     color: var(--black);
     font-size: 16px;
+    cursor: pointer;
 }
 .nav-button{
     margin-left: 40px;
@@ -132,6 +134,55 @@ section{
         text-decoration: none;
         display: flex;
         align-items: center;
+    }
+    &-map{
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(175, 224, 255, 0.7);
+        justify-content: center;
+        align-items: center;
+        z-index: 3;
+        &-frame{
+            width: 600px;
+            height: 450px;
+            border: 1px solid black;
+            border-radius: 15px;
+        }
+        &-close{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--main-color);
+            position: absolute;
+            top: calc(50% - 225px);
+            left: calc(50% + 300px);
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            &::before{
+                content: '';
+                width: 2px;
+                height: 40px;
+                background-color: var(--white);
+                position: absolute;
+                transform: rotate(45deg);
+                left: 23px;
+                top: 5px;
+            }
+            &::after{
+                content: '';
+                width: 2px;
+                height: 40px;
+                background-color: var(--white);
+                position: absolute;
+                transform: rotate(-45deg);
+                left: 23px;
+                top: 5px;
+            }
+        }
     }
 }
 
@@ -360,5 +411,21 @@ section{
     }
     &:nth-of-type(odd):hover{
         margin: 0 61px 38px 0;
+    }
+}
+.projects{
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 254px;
+    z-index: 3;
+    background: var(--second-color);
+    padding: 20px;
+    &-item{
+        display: block;
+        text-decoration: none;
+        color: black;
+        font-size: 16px;
+        padding: 10px 0;
     }
 }

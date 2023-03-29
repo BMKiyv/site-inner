@@ -21,7 +21,8 @@
         <nav class="navigation">
             <a href="" class="nav-item"><span>Документи</span></a>
             <a href="/#departments" class="nav-item"><span>Відділи</span></a>
-            <a href="" class="nav-item"><span>Проекти</span></a>
+            <div class="nav-item" id="drop-menu"><span>Проекти</span></div>
+            <div class="projects"></div>
             <a href="/#news" class="nav-item"><span>Новини / оголошення</span></a>
             <a href="" class="nav-item"><span>Інше</span></a>
             <a href="" class="nav-button"><span>Кабінет</span></a>
@@ -37,7 +38,7 @@
                 <div class="footer-item padding">Контакти</div>
                 <div class="footer-item-center">
                 <div class="footer-item"><a href="tel:+380505555555" class="footer-content"><img class="footer-icon" src="/images/icons/phone.png" alt="phone"><span>+38 050 555 55 55</span></a></div>
-                <div class="footer-item"><a href="#" class="footer-content"><img src="/images/icons/location.png" alt="" class="footer-icon"><span>Київ, вул. Прорізна 2</span></a></div>
+                <div class="footer-item" id="map"><a href="#" class="footer-content"><img src="/images/icons/location.png" alt="" class="footer-icon"><span>Київ, вул. Прорізна 2</span></a></div>
                 </div>
             </div>
             <div class="footer-column">
@@ -58,6 +59,10 @@
             </div>
         </div>
     </footer>
+    <div class="footer-map">
+        <div class="footer-map-close"></div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2540.6238166861554!2d30.519501715094613!3d50.44810729541566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4ce56d364c989%3A0x218b5ccfe12acf80!2z0LLRg9C70LjRhtGPINCf0YDQvtGA0ZbQt9C90LAsIDIsINCa0LjRl9CyLCAwMjAwMA!5e0!3m2!1suk!2sua!4v1680017313611!5m2!1suk!2sua" class="footer-map-frame" allowfullscreen="true" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
 </body>
 
 </html>

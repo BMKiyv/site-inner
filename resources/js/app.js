@@ -4,9 +4,13 @@ let nav = 0;
 let clicked = null;
 let events = [];
 let location = document.location.pathname
-console.log(location !== '/');
 let newEvent = {};
-const _token = document.querySelector('meta[name="csrf-token"]')
+const mapLink = document.querySelector('#map');
+const mapContainer = document.querySelector('.footer-map');
+const mapCloser = document.querySelector('.footer-map-close');
+const dropDown = document.querySelector('#drop-menu');
+const dropDownMenu = document.querySelector('.projects');
+const _token = document.querySelector('meta[name="csrf-token"]');
 const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
 const deleteEventModal = document.getElementById('deleteEventModal');
@@ -34,6 +38,25 @@ function openModal(date) {
   }
   backDrop.style.display = 'block';
 }
+
+mapLink.addEventListener('click', ()=>{
+  mapContainer.style.display = 'flex'
+})
+
+mapCloser.addEventListener('click', ()=>{
+  mapContainer.style.display = 'none'
+})
+
+window.addEventListener('click',(e)=>{
+  let target = e.target;
+  if(target===dropDown || target===dropDown.firstChild){
+    dropDownMenu.style.display = 'block'
+  }
+  else{
+    dropDownMenu.style.display = 'none'
+  }
+  
+})
 
 function load(nav) {
   const dt = new Date();
@@ -205,6 +228,23 @@ async function postData(data) {
 .then(answer=>console.log(answer))
 }
 
+async function getProjects() {
+  const response = await fetch('/projects')
+  const result = await response.json()
+  return result;
+}
+getProjects().then((result)=>{
+  let list = document.querySelector('.projects')
+  console.log(typeof result,result)
+  for(let item of result){
+    const projectsLi = document.createElement('a');
+    projectsLi.classList.add('projects-item');
+    projectsLi.setAttribute('href',`/projects/${item}`)
+    projectsLi.innerHTML = item;
+    list.appendChild(projectsLi);
+  }
+})
+
 function renderEvents(nav) {
   const dt = new Date().toLocaleString();
   let monthLink = +dt.substring(3, 5) + nav > 9 ? (+dt.substring(3, 5) + nav).toString() : `0${(+dt.substring(3, 5) + nav).toString()}`;
@@ -341,10 +381,11 @@ window.onload = () => {
   
   if(location === '/'){
     initButtons();
-    getData()
-    load(nav)
-    renderEvents(nav)
+    getData();
+    load(nav);
+    renderEvents(nav);
   }
+  getProjects();
 
 }
 

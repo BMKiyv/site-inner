@@ -1,0 +1,32 @@
+.project{
+    padding: 0;
+    margin: 0;
+    min-height: 800px;
+    background-image: url('../../public/images/project.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    &-title{
+        margin-top: 0px;
+        padding-top: 60px;
+        font-size: 36px;
+        line-height: 35px;
+        text-transform: uppercase;
+    }
+    &-mission{
+        display: flex;
+        align-items: center;
+        margin-bottom: 40px;
+        & h4{
+            font-size: 36px;
+            line-height: 35px;
+            margin: 0;
+            width: 20%;
+        }
+        & p{
+            margin: 0;
+        }
+    }
+    &-aim{
+        align-items: start;
+    }
+}
