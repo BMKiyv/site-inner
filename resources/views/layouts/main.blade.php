@@ -25,7 +25,16 @@
             <div class="projects"></div>
             <a href="/#news" class="nav-item"><span>Новини / оголошення</span></a>
             <a href="" class="nav-item"><span>Інше</span></a>
-            <a href="" class="nav-button"><span>Кабінет</span></a>
+            @if(Auth::user())           
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+                <button type="submit" class="nav-button"><span>Вийти</span></button>
+            </form>
+            
+            @endif
+            @if(!Auth::user())  
+                <a href="/login" class="nav-button"><span>Кабінет</span></a>
+            @endif
         </nav>
     </div>
 </header>

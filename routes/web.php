@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\Departments\DepartmentsController;
@@ -28,3 +29,6 @@ Route::delete('/events/{date}',[EventsController::class,'destroy']);
 Route::resource('/departments', DepartmentsController::class);
 Route::resource('/news', NewsController::class);
 Route::resource('/projects', ProjectsController::class);
+Auth::routes();
+
+Route::get('/cabinet', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -335,7 +335,7 @@ function renderEvents(nav) {
 
 }
 
-window.onload = () => {
+window.addEventListener('DOMContentLoaded',() => {
   let container = document.getElementsByClassName('birthdays')[0];
   let overload = document.getElementsByClassName('birthday');
   let birthdayMonth = document.getElementsByClassName('birthday-month');
@@ -379,13 +379,15 @@ window.onload = () => {
     item.innerHTML = content.split('-').reverse().join('.')
   }
   
+  getProjects();
+
+})
+window.onload=()=>{
   if(location === '/'){
     initButtons();
     getData();
     load(nav);
     renderEvents(nav);
   }
-  getProjects();
-
 }
 

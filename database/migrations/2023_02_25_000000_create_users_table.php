@@ -14,18 +14,17 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('position');
-            $table->string('phone');
-            $table->date('birthday');
-            $table->boolean('is_admin');
+            $table->string('position')->nullable()->default('главспец');
+            $table->string('phone')->nullable()->default('+380000000000');
+            $table->boolean('is_hired')->nullable()->default(true);
+            $table->date('birthday')->nullable()->default('1980-01-01');
+            $table->boolean('is_admin')->nullable()->default(false);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->bigInteger('department_id')->unsigned();
+            $table->bigInteger('department_id')->unsigned()->nullable()->default(11);
             $table->timestamps();
-
-            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 
