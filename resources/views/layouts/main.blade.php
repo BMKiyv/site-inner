@@ -24,7 +24,7 @@
             <div class="nav-item" id="drop-menu"><span>Проекти</span></div>
             <div class="projects"></div>
             <a href="/#news" class="nav-item"><span>Новини / оголошення</span></a>
-            <a href="" class="nav-item"><span>Інше</span></a>
+            <a href="/photos" class="nav-item"><span>Інше</span></a>
             @if(Auth::user())           
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf

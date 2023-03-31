@@ -52,6 +52,10 @@ class DepartmentsTableSeeder extends Seeder
                 [
                     "name"=> "Відділ зв'язків з громадськістю",
                     "image"=> "/images/icons/pr.svg"
+                ],
+                [
+                    "name"=> "не призначено",
+                    "image"=> "/images/icons/no-department.svg"
                 ]
             
         ];

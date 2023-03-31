@@ -1,0 +1,13 @@
+.photos{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 60px;
+    &-date{
+        font-weight: bold;
+        font-size: 18px;
+    }
+    &-image{
+        margin: 30px 0 17px 0;
+    }
+}

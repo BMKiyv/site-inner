@@ -436,6 +436,7 @@ section{
     z-index: 3;
     background: var(--second-color);
     padding: 20px;
+    box-shadow: 1px 1px 2px 2px var(--main-color);
     &-item{
         display: block;
         text-decoration: none;
