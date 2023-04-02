@@ -8,6 +8,7 @@
         <p>{{Auth::user()->department_id }}</p>
         <p>{{Auth::user()->birthday }}</p>
         <p>{{Auth::user()->email }}</p>
+        <p>{{Auth::user()->events[0]->title }}</p>
     </div>
 </section>
 @endsection

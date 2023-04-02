@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->bigInteger('department_id')->unsigned()->nullable()->default(11);
+            $table->bigInteger('event_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }

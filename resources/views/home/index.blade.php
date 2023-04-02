@@ -51,6 +51,7 @@
               </div>
               @endforeach
             </div>
+            <hr/>
             <div class="events-list"></div>
           </div>
       </div>
@@ -62,7 +63,7 @@
           @foreach($news as $item)
             <div class="news-block">
               <div class="news-date">{{$item->date}}</div>
-              <img src="{{$item->image}}" alt="{{$item->date}}">
+              <img src="{{$item->image}}" alt="{{($item->date)}}">
               <p class="news-description">{{$item->description}}</p>
             </div>
             @endforeach
