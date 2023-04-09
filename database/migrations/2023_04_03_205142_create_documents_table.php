@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_user', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('event_id')->unsigned()->nullable();
-            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->string('title');
+            $table->string('image');
+            $table->string('icon');
+            $table->string('path');
+            $table->boolean('internal')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('photos');
+        Schema::dropIfExists('documents');
     }
 };

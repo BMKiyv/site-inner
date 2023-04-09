@@ -19,9 +19,10 @@
     <div class="container flex-container">
         <a href="/"><img class="logo" src="/images/logo.svg" alt="logo"></a>
         <nav class="navigation">
-            <a href="" class="nav-item"><span>Документи</span></a>
+            <div class="nav-item drop-menu"><span>Документи</span></div>
+            <div class="documents"></div>
             <a href="/#departments" class="nav-item"><span>Відділи</span></a>
-            <div class="nav-item" id="drop-menu"><span>Проекти</span></div>
+            <div class="nav-item drop-menu"><span>Проекти</span></div>
             <div class="projects"></div>
             <a href="/#news" class="nav-item"><span>Новини / оголошення</span></a>
             <a href="/photos" class="nav-item"><span>Інше</span></a>

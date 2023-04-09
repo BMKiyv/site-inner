@@ -4,12 +4,14 @@ let nav = 0;
 let clicked = null;
 let events = [];
 let location = document.location.pathname
+const userName = location === '/cabinet'?document.getElementById('user').innerHTML: null;
 let newEvent = {};
 const mapLink = document.querySelector('#map');
 const mapContainer = document.querySelector('.footer-map');
 const mapCloser = document.querySelector('.footer-map-close');
-const dropDown = document.querySelector('#drop-menu');
+const dropDown = document.querySelectorAll('.drop-menu');
 const dropDownMenu = document.querySelector('.projects');
+const DocsMenu = document.querySelector('.documents');
 const _token = document.querySelector('meta[name="csrf-token"]');
 const calendar = document.getElementById('calendar');
 const newEventModal = document.getElementById('newEventModal');
@@ -19,6 +21,49 @@ const eventTitleInput = document.getElementById('eventTitleInput');
 let eventsList = document.getElementsByClassName('events-list')[0];
 const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const monthArray = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня']
+
+window.onload=()=>{
+  if(location === '/'){
+    initButtons();
+    getData(null)
+    .then((res) => {
+      console.log(res)
+      const dt = new Date().toLocaleString();
+      let loadingEvents = []
+      for (let i = 0; i < res.length; i++) {    
+        let data = { 'date': res[i].date, 'title': res[i].title }
+        loadingEvents.push(data)
+      }
+      if (events.length === 0) {
+        events = [...loadingEvents]
+        localStorage.setItem('events', JSON.stringify(events));
+      }
+      let list = events.filter((item) => item.date.substring(5, 7) == dt.substring(3, 5))
+      return renderEvents(nav,list);
+    }).then(()=>load(nav));
+  }
+  if(location === '/cabinet'){
+    const userName = document.getElementById('user').innerHTML
+    initButtons();
+    getData(userName)
+    .then((res) => {
+      console.log(res)
+      const dt = new Date().toLocaleString();
+      let loadingEvents = []
+      for (let i = 0; i < res.length; i++) {    
+        let data = { 'date': res[i].date, 'title': res[i].title }
+        loadingEvents.push(data)
+      }
+      if (events.length === 0) {
+        events = [...loadingEvents]
+        localStorage.setItem('events', JSON.stringify(events));
+      }
+      events = events.filter((item) => item.date.substring(5, 7) == dt.substring(3, 5))
+      return events;
+    }).then(()=>load(nav))  
+  }
+}
+
 function openModal(date) {
   clicked = date;
 
@@ -49,29 +94,30 @@ mapCloser.addEventListener('click', ()=>{
 
 window.addEventListener('click',(e)=>{
   let target = e.target;
-  if(target===dropDown || target===dropDown.firstChild){
-    dropDownMenu.style.display = 'block'
-  }
-  else{
-    dropDownMenu.style.display = 'none'
-  }
-  
+    if(target==dropDown[0] || target==dropDown[0].firstChild){
+      DocsMenu.style.display = 'block'
+    }
+    if(target===dropDown[1] || target===dropDown[1].firstChild){
+      dropDownMenu.style.display = 'block'
+    }
+    else if(target!==dropDown[1] || target!==dropDown[1].firstChild){
+      dropDownMenu.style.display = 'none'
+    } 
+     if(target!==dropDown[0].firstChild){
+      DocsMenu.style.display = 'none'
+    }
 })
 
-function load(nav) {
+async function load(nav) {
   const dt = new Date();
-
   if (nav !== 0) {
     dt.setMonth(new Date().getMonth() + nav);
   }
-
   const day = dt.getDate();
   const month = dt.getMonth();
   const year = dt.getFullYear();
-
   const firstDayOfMonth = new Date(year, month, 1);
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-
   const dateString = firstDayOfMonth.toLocaleDateString('en-us', {
     weekday: 'long',
     year: 'numeric',
@@ -79,7 +125,8 @@ function load(nav) {
     day: 'numeric',
   });
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
-  renderEvents(nav);
+  console.log(events);
+  renderEvents(nav,events);
 
   document.getElementById('monthDisplay').innerText =
     `${dt.toLocaleDateString('uk-UA', { month: 'long' })} ${year}`;
@@ -91,10 +138,10 @@ function load(nav) {
     daySquare.classList.add('day');
 
     const dayString = i - paddingDays > 9 ? `${year}-0${month + 1}-${i - paddingDays}` : `${year}-0${month + 1}-0${i - paddingDays}`;
-
+    const eventForDay = events.find(e => e.date === dayString);
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
-      const eventForDay = events.find(e => e.date === dayString);
+      
       //console.log(i - paddingDays,paddingDays);
       if (i - paddingDays === day && nav === 0) {
         daySquare.id = 'currentDay';
@@ -124,7 +171,7 @@ function closeModal() {
   eventTitleInput.value = '';
   clicked = null;
   load(nav);
-  renderEvents(nav);
+  renderEvents(nav,events);
 }
 
 function saveEvent() {
@@ -135,12 +182,19 @@ function saveEvent() {
       date: clicked,
       title: eventTitleInput.value,
     });
-    let dataForPosting = JSON.stringify({ ...newEvent, 'title': eventTitleInput.value });
+    let dataForPosting;
+    if(location !=='/'){
+      dataForPosting = JSON.stringify({ ...newEvent, 'title': eventTitleInput.value, 'user': userName });
+    }
+    else {
+      dataForPosting = JSON.stringify({ ...newEvent, 'title': eventTitleInput.value });
+    }
+
     console.log(dataForPosting)
     localStorage.setItem('events',dataForPosting); 
     closeModal()
-    renderEvents(nav)
-    postData(dataForPosting)
+    renderEvents(nav,events)
+    postData(dataForPosting,userName)
   } else {
     eventTitleInput.classList.add('error');
   }
@@ -151,7 +205,8 @@ function saveEvent() {
   let deletEdevent = events.filter(e => e.date == clicked);
   let _date = deletEdevent[0].date
   console.log(_date,deletEdevent);
-  fetch(`/events/${_date}`, {
+  let url = location === '/'? `/events/${_date}`: `/events/${userName}/${_date}` ;
+  fetch( url, {
     method: 'DELETE',
         headers: {
       "Content-Type": "application/json",
@@ -163,7 +218,7 @@ function saveEvent() {
   events = events.filter(e => e.date !== clicked);
   
   localStorage.setItem('events', JSON.stringify(events));
-  renderEvents(nav);
+  renderEvents(nav,events);
   closeModal();
 }
 
@@ -171,13 +226,13 @@ function initButtons() {
   document.getElementById('nextButton').addEventListener('click', () => {
     nav++;
     load(nav);
-    renderEvents(nav);
+    renderEvents(nav,events);
   });
 
   document.getElementById('backButton').addEventListener('click', () => {
     nav--;
     load(nav);
-    renderEvents(nav)
+    renderEvents(nav,events)
   });
 
   document.getElementById('saveButton').addEventListener('click', saveEvent);
@@ -186,32 +241,32 @@ function initButtons() {
   document.getElementById('closeButton').addEventListener('click', closeModal);
 }
 
-async function getData() {
-  const response = await fetch('/getevents')
+async function getData(id) {
+  let url = '';
+  if(id){
+    url = `/getevents/${id}`
+  }
+  else{
+    url = '/getevents'
+  }
+ const response = await fetch(url)
   const result = await response.json()
+  //console.log(result)
   return result;
 }
 
-getData().then((res) => {
-  //console.log(res)
-  const dt = new Date().toLocaleString();
-  let loadingEvents = []
-  for (let i = 0; i < res.length; i++) {
 
-    let data = { 'date': res[i].date, 'title': res[i].title }
-    loadingEvents.push(data)
-  }
-  if (events.length === 0) {
-    events = [...loadingEvents]
-    localStorage.setItem('events', JSON.stringify(events));
-  }
-  let list = events.filter((item) => item.date.substring(5, 7) == dt.substring(3, 5))
-  return list
-})
 
-async function postData(data) {
-  console.log(data);
-  await fetch('/postevents', {
+async function postData(data,id) {
+  console.log(data,id);
+  let url = '';
+  if(id){
+    url = `/postevents/${id}`
+  }
+  else {
+    url = '/postevents'
+  }
+  await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -234,18 +289,25 @@ async function getProjects() {
   return result;
 }
 getProjects().then((result)=>{
-  let list = document.querySelector('.projects')
-  console.log(typeof result,result)
-  for(let item of result){
+  //console.log(typeof result,result)
+  for(let item of result[0]){
     const projectsLi = document.createElement('a');
     projectsLi.classList.add('projects-item');
     projectsLi.setAttribute('href',`/projects/${item}`)
     projectsLi.innerHTML = item;
-    list.appendChild(projectsLi);
+    dropDownMenu.appendChild(projectsLi);
+  }
+  for(let item of result[1]){
+    const projectsLi = document.createElement('a');
+    projectsLi.classList.add('documents-item');
+    projectsLi.setAttribute('href',`/documents/${item}`)
+    projectsLi.innerHTML = item;
+    DocsMenu.appendChild(projectsLi);
   }
 })
 
-function renderEvents(nav) {
+async function renderEvents(nav,events) {
+  console.log(events);
   const dt = new Date().toLocaleString();
   let monthLink = +dt.substring(3, 5) + nav > 9 ? (+dt.substring(3, 5) + nav).toString() : `0${(+dt.substring(3, 5) + nav).toString()}`;
   let arrevents = events.filter((item) => item.date.substring(5, 7) == monthLink)
@@ -255,7 +317,6 @@ function renderEvents(nav) {
     return 0
   });
   if (eventsList.hasChildNodes()) {
-
     let eventsParent = eventsList.parentNode;
     eventsParent.removeChild(eventsList)
     let element = document.createElement('div');
@@ -324,7 +385,6 @@ function renderEvents(nav) {
         }
       }
       else {
-
         let titleEvent = document.createElement('div');
         titleEvent.classList.add('title')
         titleEvent.innerHTML = 'time without events'
@@ -332,10 +392,10 @@ function renderEvents(nav) {
       }
     })
   }
-
 }
 
 window.addEventListener('DOMContentLoaded',() => {
+  if(location === '/'){
   let container = document.getElementsByClassName('birthdays')[0];
   let overload = document.getElementsByClassName('birthday');
   let birthdayMonth = document.getElementsByClassName('birthday-month');
@@ -373,21 +433,12 @@ window.addEventListener('DOMContentLoaded',() => {
       } 
     }
   }
-
   for (let item of newsDate){
     let content = item.innerHTML;
     item.innerHTML = content.split('-').reverse().join('.')
   }
-  
-  getProjects();
-
-})
-window.onload=()=>{
-  if(location === '/'){
-    initButtons();
-    getData();
-    load(nav);
-    renderEvents(nav);
-  }
 }
+  getProjects();
+})
+
 
