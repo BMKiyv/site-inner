@@ -18,19 +18,28 @@
                     <div id="calendar"></div>
                 </div>
             </div>
-            <div class="content">
-                <div class="events-list"></div>
+            <div class="cabinet">
+            <div class="flex cabinet-buttons">
+                <form action="" method="post" class="cabinet-form">
+                <input type="submit" class="cabinet-problem" value="Повідомити про проблему">
+                </form>
+                <form action="" method="post" class="cabinet-form">
+                <input type="submit" class="cabinet-task" form="newTask" value="Додати задачу">
+                </form>
+            </div>
+
+            <hr>
+            <div class="content cabinet-content">
+                <div class="cabinet-content-header">
+                    <div class="cabinet-date">Строк виконання</div>
+                    <div class="cabinet-event">Задачі</div>
+                    <div class="cabinet-user">{{Auth::user()->name}}</div>
+                </div>
+                <div class="events-list cabinet-content"></div>
             </div>
         </div>
-        <p>{{Auth::user()->name }}</p>
+        </div>
         <p id="user">{{Auth::user()->id }}</p>
-        <p>{{Auth::user()->birthday }}</p>
-        <p>{{Auth::user()->email }}</p>
-        @if(count(Auth::user()->events)!==0)
-        @foreach(Auth::user()->events as $item)
-        <p>{{$item->title }}</p>
-        @endforeach
-        @endif
     </div>          
     <div id="newEventModal">
         <h2>Нова подія</h2>          
@@ -45,6 +54,72 @@
         <button id="closeButton">Закрити</button>
     </div>          
     <div id="modalBackDrop"></div>
+    <div class="cabinet-document" style="display:none"><label for="doc">+ приклад документа</label>
+        <form action="{{route('documents.upload')}}" method="POST"><input hidden type="file" name="doc" id="doc"></form>
+    </div>
+</div>
+<div class="task">
+    <div class="container">
+    <div class="flex task-container">
+        <span class="task-header">Задача</span>
+        <span class="task-header">Строки</span>
+        <span class="task-header">Виконавці</span>
+    </div>
+    {{-- @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif --}}
+    <div>
+        <form action="/postevents/{{Auth::user()->id }}" id="newTask"  class="task-inputs" method="POST">
+            @csrf
+            <div>
+            @error('task-title')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+             @enderror
+            <input type="text" class="task-title" name="task-title" id="title">
+        </div>
+        <div>
+            @error('task-date')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+            <input type="date" class="task-date" name="task-date" id="date">
+        </div>
+            <div class="task-users">
+                <div class="task-name">{{Auth::user()->name}}</div>
+                {{-- <label for="spec">+ додати співробітника</label>
+                <input type="text" hidden name="specialist" id="spec"> --}}
+                <select name="task-additional-user" id="addUser">
+                    <option value="">+ додати співробітника</option>
+                    @foreach($users as $item)
+                    <option>{{$item}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="task-heading">
+                <div>
+                    <div>Детальний опис завдання</div>
+                    <div class="task-materials">Допоміжні матеріали</div>
+                </div>
+                <div class="task-text">
+                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                    <div class="task-files"></div>
+                    <div class="cabinet-document"><label>+ приклад документа
+                        <form action="{{route('documents.upload')}}" method="POST" id="newEventDoc"><input form="newEventDoc" id="nEventDoc" hidden type="file" name="doc"></form></label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 </div>
 </section>
 @endsection

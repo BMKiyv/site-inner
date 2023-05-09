@@ -27,11 +27,11 @@ window.onload=()=>{
     initButtons();
     getData(null)
     .then((res) => {
-      console.log(res)
+      //console.log(res)
       const dt = new Date().toLocaleString();
       let loadingEvents = []
       for (let i = 0; i < res.length; i++) {    
-        let data = { 'date': res[i].date, 'title': res[i].title }
+        let data = { 'date': res[i].date, 'title': res[i].title, 'id': res[i].id }
         loadingEvents.push(data)
       }
       if (events.length === 0) {
@@ -43,24 +43,23 @@ window.onload=()=>{
     }).then(()=>load(nav));
   }
   if(location === '/cabinet'){
-    const userName = document.getElementById('user').innerHTML
-    initButtons();
     getData(userName)
     .then((res) => {
-      console.log(res)
+      //console.log(res)
       const dt = new Date().toLocaleString();
       let loadingEvents = []
       for (let i = 0; i < res.length; i++) {    
-        let data = { 'date': res[i].date, 'title': res[i].title }
+        let data = { 'date': res[i].date, 'title': res[i].title, 'id': res[i].id }
         loadingEvents.push(data)
       }
       if (events.length === 0) {
         events = [...loadingEvents]
         localStorage.setItem('events', JSON.stringify(events));
       }
-      events = events.filter((item) => item.date.substring(5, 7) == dt.substring(3, 5))
-      return events;
+     let list = events.filter((item) => item.date.substring(5, 7) == dt.substring(3, 5))
+      return renderEvents(nav,list);
     }).then(()=>load(nav))  
+    initButtons();
   }
 }
 
@@ -70,7 +69,7 @@ function openModal(date) {
   const eventForDay = events.find(e => e.date === clicked);
 
   if (eventForDay) {
-    console.log(eventForDay,clicked.substring(8, 10));
+    //console.log(eventForDay,clicked.substring(8, 10));
     let deleteDateMonth = document.getElementsByClassName('deleteDateMonth')[0]
     let deleteDateDay = document.getElementsByClassName('deleteDateDay')[0]
     deleteDateMonth.innerHTML = monthArray[clicked.substring(5, 7)-1]
@@ -108,7 +107,7 @@ window.addEventListener('click',(e)=>{
     }
 })
 
-async function load(nav) {
+function load(nav) {
   const dt = new Date();
   if (nav !== 0) {
     dt.setMonth(new Date().getMonth() + nav);
@@ -125,7 +124,7 @@ async function load(nav) {
     day: 'numeric',
   });
   const paddingDays = weekdays.indexOf(dateString.split(', ')[0]);
-  console.log(events);
+  //console.log(events);
   renderEvents(nav,events);
 
   document.getElementById('monthDisplay').innerText =
@@ -161,6 +160,50 @@ async function load(nav) {
 
     calendar.appendChild(daySquare);
   }
+
+  function handleUpload (e){
+    let target = e.target;
+    console.log('target:', target);
+    if(target.tagName==='INPUT'){
+    const file = target.files[0];
+    const formData = new FormData();
+    let eventId = target.getAttribute('data-id');
+    console.log('event id:', eventId);
+    console.log('target:', target);
+    console.log('file:', file);
+    formData.append('file', file);
+    let url = location==='/cabinet'? eventId? `/documents/examples/upload?event_id=${eventId}`: `/documents/examples/upload?event_id=0&user_id=${userName}` : `/documents/examples/upload?event_id=${eventId}`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': _token.getAttribute('content'),
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: formData
+    })
+    .then(response => {
+      return response.text(); // extract the response body as text
+    })
+    .then(text => {
+      text = JSON.parse(decodeURIComponent(text))
+      let container = document.querySelector('.task-materials');
+      let child = document.createElement('div')
+      child.innerHTML = text.path
+      console.log(text,typeof text);
+      container.appendChild(child)
+
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+  }
+
+  eventsList.addEventListener('change', handleUpload); 
+  if(location==='/cabinet'){
+    document.querySelector('#nEventDoc').addEventListener('change',handleUpload)
+  }
+
 }
 
 function closeModal() {
@@ -190,7 +233,7 @@ function saveEvent() {
       dataForPosting = JSON.stringify({ ...newEvent, 'title': eventTitleInput.value });
     }
 
-    console.log(dataForPosting)
+    //console.log(dataForPosting)
     localStorage.setItem('events',dataForPosting); 
     closeModal()
     renderEvents(nav,events)
@@ -204,8 +247,8 @@ function saveEvent() {
 
   let deletEdevent = events.filter(e => e.date == clicked);
   let _date = deletEdevent[0].date
-  console.log(_date,deletEdevent);
   let url = location === '/'? `/events/${_date}`: `/events/${userName}/${_date}` ;
+  console.log(_date,deletEdevent,url);
   fetch( url, {
     method: 'DELETE',
         headers: {
@@ -258,7 +301,7 @@ async function getData(id) {
 
 
 async function postData(data,id) {
-  console.log(data,id);
+  //console.log(data,id);
   let url = '';
   if(id){
     url = `/postevents/${id}`
@@ -280,7 +323,10 @@ async function postData(data,id) {
 .then((res)=>{
   res.json()
 })
-.then(answer=>console.log(answer))
+.then(()=>{
+  window.location.reload();
+  return false;
+})
 }
 
 async function getProjects() {
@@ -306,8 +352,9 @@ getProjects().then((result)=>{
   }
 })
 
-async function renderEvents(nav,events) {
-  console.log(events);
+function renderEvents(nav,events) {
+  const docUpload = document.querySelector('.cabinet-document');
+    //console.log(docUpload);
   const dt = new Date().toLocaleString();
   let monthLink = +dt.substring(3, 5) + nav > 9 ? (+dt.substring(3, 5) + nav).toString() : `0${(+dt.substring(3, 5) + nav).toString()}`;
   let arrevents = events.filter((item) => item.date.substring(5, 7) == monthLink)
@@ -331,11 +378,13 @@ async function renderEvents(nav,events) {
       reverseDate[2] = reverseDate[2].substring(4,-1)
 
       if (arrevents.length > 0) {
+        let clone = docUpload.cloneNode('true');
+        clone.style.display = 'block';
         let eventContainer = document.createElement('div');
         let dateEvent = document.createElement('span');
         let monthEvent = document.createElement('span');
         let titleEvent = document.createElement('span');
-        eventContainer.classList.add('date-container')
+        eventContainer.classList.add('date-container');
         dateEvent.classList.add('date')
         titleEvent.classList.add('title')
         monthEvent.classList.add('month')
@@ -346,13 +395,23 @@ async function renderEvents(nav,events) {
         eventContainer.appendChild(dateEvent);
         eventContainer.appendChild(monthEvent);
         eventContainer.appendChild(titleEvent);
+        eventContainer.appendChild(clone);
+        let inputs = clone.querySelectorAll('input');
+        inputs.forEach(input => {
+          console.log(input);
+          input.setAttribute('data-id', item.id);
+        }); 
+
         if(reverseDate.reverse().join('-')===item.date){
           eventContainer.style.fontWeight = 'bold'
         }
       }
-      console.log(reverseDate.reverse().join('-'),item.date);
+     // console.log(reverseDate.reverse().join('-'),item.date);
     })
     if (arrevents.length == 0) {
+      if(location==='/cabinet'){
+        eventsList.classList.add('cabinet-content')
+      }
       let titleEvent = document.createElement('div');
       titleEvent.classList.add('withoutEvents')
       titleEvent.innerHTML = 'В цьому місяці немає подій'

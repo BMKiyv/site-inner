@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Models\User;
 class UserController extends Controller
 {
     /**
@@ -24,7 +24,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        
-        return view('cabinet.index');
+        $users = User::all()->pluck('name','id');
+        //dd($users);
+        return view('cabinet.index',['users'=>$users]);
     }
 }

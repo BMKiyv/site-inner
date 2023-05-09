@@ -17,7 +17,7 @@
             <div id="calendar"></div>
           </div>
         </div>
-      
+
           <div id="newEventModal">
             <h2>Нова подія</h2>
       
@@ -99,5 +99,8 @@
     </div>
     </div>
   </div>
+  <div class="cabinet-document" style="display:none">
+    <form action="{{route('documents.upload')}}" method="POST"><label>+ приклад документа<input hidden type="file" name="doc"></label></form>
+</div>
   </section>
 @endsection

@@ -31,6 +31,7 @@ Route::post('/postevents/{id}',[EventsController::class,'postEventsWithId']);
 Route::delete('/events/{date}',[EventsController::class,'destroy']);
 Route::delete('/events/{id}/{date}',[EventsController::class,'destroyWithId']);
 Route::get('/documents/{folder}/{name}/download',[DocumentsController::class,'download'])->name('documents.download');
+Route::post('/documents/examples/upload',[DocumentsController::class, 'upload'])->name('documents.upload');
 
 
 Route::resource('/departments', DepartmentsController::class);
