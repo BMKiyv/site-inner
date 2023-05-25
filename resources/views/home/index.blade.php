@@ -56,10 +56,10 @@
           </div>
       </div>
   </section>
-  <section class="flex" id="news">
+  <section id="news">
     <div class="news">
       <div class="news-wrap">
-        <div class="news-content">
+        <div class="news-content container">
           @foreach($news as $item)
             <div class="news-block">
               <div class="news-date">{{$item->date}}</div>

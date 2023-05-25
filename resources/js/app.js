@@ -404,6 +404,9 @@ function renderEvents(nav,events) {
 
         if(reverseDate.reverse().join('-')===item.date){
           eventContainer.style.fontWeight = 'bold'
+          eventContainer.style.border = '1px solid var(--hilight)'
+          eventContainer.style.borderRadius = '15px'
+          eventContainer.style.padding = '10px'
         }
       }
      // console.log(reverseDate.reverse().join('-'),item.date);

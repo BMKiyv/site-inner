@@ -7,7 +7,7 @@ class AdminNewsController extends Controller
 {
     public function index () {
         $news = Article::all();
-        return view('admin.news',['news'=>$news]);
+        return view('admin.news.index',['news'=>$news]);
     }
     public function show () {
         

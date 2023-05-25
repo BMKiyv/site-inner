@@ -33,7 +33,7 @@ return [
     'boolean' => 'The :attribute field must be true or false.',
     'confirmed' => 'The :attribute confirmation does not match.',
     'current_password' => 'Цей пароль невірний.',
-    'date' => 'The :attribute is not a valid date.',
+    'date' => 'Вкажи вірну дату',
     'date_equals' => 'The :attribute must be a date equal to :date.',
     'date_format' => 'The :attribute does not match the format :format.',
     'declined' => 'The :attribute must be declined.',
@@ -142,6 +142,7 @@ return [
     'uppercase' => 'The :attribute must be uppercase.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'name' => 'Що ти вводиш?!',
 
     /*
     |--------------------------------------------------------------------------

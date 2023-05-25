@@ -43,6 +43,15 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
+#pgside a:last-of-type{
+  position: relative;
+  left: 0;
+  bottom: -50%;
+  background: rgba(255,164,39, 0.7);
+  color: #fff;
+  margin-left: 0px;
+  border-radius: 0px;
+}
 #pgside a.current { background: var(--hilight); }
 #pgside a:hover { background: rgba(255,164,39, 0.7); }
 
@@ -61,6 +70,7 @@ body {
     text-align: center;
     padding: 20px 0;
   }
+
   #pgside i.ico {
     font-size: 1.5em;
     margin-right: 0;
@@ -90,3 +100,83 @@ ul.zebra, ol.zebra {
 }
 ul.zebra li, ol.zebra li { padding: 10px; }
 ul.zebra li:nth-child(odd), ol.zebra li:nth-child(odd) { background: #f2f2f2; }
+div.col-md-6 input.form-control{
+  height: 50px;
+}
+.delete-button{
+  display: inline-block;
+  margin-left: 30px;
+  padding: 7px 20px;
+  background-color: rgb(244, 64, 64);
+  color: var(--second-color);
+  outline: none;
+  border: 1px solid var(--second-color);
+  border-radius: 10px;
+  min-width: 120px;
+  margin-bottom: 0;
+}
+
+.change-button{
+  display: inline-block;
+  margin-left: 30px;
+  padding: 7px 20px;
+  background-color: rgb(118, 203, 237);
+  color: black;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 10px;
+  min-width: 120px;
+  text-decoration: none;
+}
+
+.admin{
+  &-user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    &-content{
+      display: inline-block;
+      margin-right: 20px;
+    }
+    &-buttons{
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+  &-submit{
+    display: inline-block;
+    margin-top: 30px;
+    padding: 15px 35px;
+    background-color: var(--second-color);
+    color: var(--hilight);
+    outline: none;
+    border: 1px solid var(--hilight);
+    border-radius: 15px;
+  }
+  &-select{
+    padding: 5px 0 5px 20px;
+    width: 296px; 
+    border: 1px solid var(--hilight);
+    border-radius: 5px;
+    &-wrapper{
+      position: relative;
+      &::after,&::before{
+        content: "";
+        height: 10px;
+        width: 2px;
+        background: var(--hilight);
+        position: absolute;
+        top: 9px;
+        left: 274px;
+        transform: rotate(30deg);
+      }
+      &::before{
+        transform: rotate(-30deg);
+        left: 270px;
+      }
+    }
+  }
+}

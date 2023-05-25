@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('title','Новини/оголошення')
 @section('content')
-<section>
+<section id="news-page">
     <div class="container">
             <h3 class="staff-title">Новини / оголошення</h3>
 

@@ -7,7 +7,7 @@ class AdminDocumentsController extends Controller
 {
     public function index () {
         $docs = Document::all();
-        return view('admin.documents',['docs'=>$docs]);
+        return view('admin.documents.index',['docs'=>$docs]);
     }
     public function show () {
         

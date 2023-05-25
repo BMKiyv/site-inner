@@ -7,7 +7,7 @@ class AdminPhotosController extends Controller
 {
     public function index () {
         $photos = Photo::all();
-        return view('admin.photos',['photos'=>$photos]);
+        return view('admin.photos.index',['photos'=>$photos]);
     }
     public function show () {
         

@@ -31,10 +31,12 @@
                 @csrf
                 <button type="submit" class="nav-button"><span>Вийти</span></button>
             </form>
-            
             @endif
             @if(!Auth::user())  
                 <a href="/login" class="nav-button"><span>Кабінет</span></a>
+            @endif
+            @if(Auth::user() && Auth::user()->is_admin)
+            <a href="/admin" class="nav-button"><span>Admin</span></a>
             @endif
         </nav>
     </div>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-    @vite(['resources/sass/admin.scss', 'resources/js/login.js'])
+    @vite(['resources/sass/admin.scss','resources/sass/style.scss', 'resources/js/login.js'])
     <title>Адміністратор</title>
   </head>
   <body>
@@ -38,6 +38,7 @@
         <i class="ico">&#128202;</i>
         <i class="txt">Проекти</i>
       </a>
+      <a href="/" class="nav-button">Повернутися на сайт</a>
     </div>
 
     <!-- (B) MAIN -->
