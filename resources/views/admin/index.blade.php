@@ -16,7 +16,7 @@
         <img src="{{asset('images/staff/dog3.jpg')}}">
         <i class="txt">Адміністратор</i>
       </div>
-
+      <a href="/" class="nav-button">Повернутися на сайт</a>
       <!-- (A2) MENU ITEMS -->
       <a href="{{asset('/admin')}}" class="links">
         <i class="ico">&#129464;</i>
@@ -38,7 +38,7 @@
         <i class="ico">&#128202;</i>
         <i class="txt">Проекти</i>
       </a>
-      <a href="/" class="nav-button">Повернутися на сайт</a>
+
     </div>
 
     <!-- (B) MAIN -->
