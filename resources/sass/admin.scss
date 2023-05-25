@@ -102,6 +102,7 @@ ul.zebra li, ol.zebra li { padding: 10px; }
 ul.zebra li:nth-child(odd), ol.zebra li:nth-child(odd) { background: #f2f2f2; }
 div.col-md-6 input.form-control{
   height: 50px;
+  width: 1200px;
 }
 .delete-button{
   display: inline-block;
@@ -177,6 +178,64 @@ div.col-md-6 input.form-control{
         transform: rotate(-30deg);
         left: 270px;
       }
+    }
+  }
+  &-project{
+    &-title{
+      font-weight: bold;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+    &-content{
+      background: #f2f2f2;
+      padding: 10px;
+    }
+    &-buttons{
+      margin-top: 10px;
+      &>a.change-button{
+        margin-left: 0;
+      }
+    }
+    &-newbutton{
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 35px;
+      background-color: var(--second-color);
+      color: var(--hilight);
+      outline: none;
+      border: 1px solid var(--hilight);
+      border-radius: 15px;
+      text-decoration: none;
+      margin-left: 30px;
+    }
+    &-textarea{
+      border: 2px solid var(--main-color);
+    border-radius: 15px;
+    padding: 10px;
+    font-size: 18px;
+    margin-bottom: 30px;
+    width: 1200px;
+    &:focus{
+      box-shadow: 0px 0px 9px 2px var(--second-color);
+      border-color: var(--main-color);
+      outline: none;
+  }
+    }
+    &-submit{
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 35px;
+      background-color: var(--second-color);
+      color: var(--hilight);
+      outline: none;
+      border: 1px solid var(--hilight);
+      border-radius: 15px;
+      text-decoration: none;
+      &:hover{
+        box-shadow: 0px 0px 9px 2px var(--second-color);
+        border-color: var(--main-color);
+        outline: none;
+    }
     }
   }
 }
