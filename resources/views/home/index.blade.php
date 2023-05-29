@@ -4,10 +4,11 @@
 <section>
     <div class="container flex">
       <div>
-        <div class="search">
+        <form action="{{route('search')}}" class="search" method="GET">
+          @csrf
             <input type="search" name="main-search" id="main-search">
-            <img class="search-img" src="./images/icons/search.png" alt="search">
-        </div>
+            <button type="submit"><img class="search-img" src="./images/icons/search.png" alt="search"></button>
+        </form action="">
         <div id="calendar-container">
             <div id="calendar-header">
                 <button id="backButton"></button>

@@ -70,7 +70,7 @@
                 </span>
             @enderror
         <select name="user-department" class="admin-select">
-            <option value="null" disabled selected>Виберіть відділ</option>
+            <option value="not_changed" disabled selected>Виберіть відділ</option>
             @foreach ($departments as $item)
                 <option value="{{$item->id}}">{{$item->name}}</option>
             @endforeach

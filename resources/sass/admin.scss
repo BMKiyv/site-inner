@@ -113,6 +113,11 @@ div.col-md-6 input.form-control{
   border-radius: 10px;
   min-width: 120px;
   margin-bottom: 0;
+  &:hover{
+    box-shadow: 0px 0px 9px 2px rgb(199, 65, 65);
+    border-color: rgb(253, 153, 4);
+    outline: none;
+  }
 }
 
 .change-button{
@@ -126,6 +131,12 @@ div.col-md-6 input.form-control{
   border-radius: 10px;
   min-width: 120px;
   text-decoration: none;
+  &:hover{
+    box-shadow: 0px 0px 9px 2px var(--second-color);
+    border-color: var(--main-color);
+    outline: none;
+    text-decoration: none;
+  }
 }
 
 .admin{
@@ -205,6 +216,11 @@ div.col-md-6 input.form-control{
       border-radius: 15px;
       text-decoration: none;
       margin-left: 30px;
+      &:hover{
+        box-shadow: 0px 0px 9px 2px var(--second-color);
+        border-color: var(--main-color);
+        outline: none;
+      }
     }
     &-textarea{
       border: 2px solid var(--main-color);
@@ -217,7 +233,7 @@ div.col-md-6 input.form-control{
       box-shadow: 0px 0px 9px 2px var(--second-color);
       border-color: var(--main-color);
       outline: none;
-  }
+      }
     }
     &-submit{
       display: inline-block;
@@ -233,7 +249,7 @@ div.col-md-6 input.form-control{
         box-shadow: 0px 0px 9px 2px var(--second-color);
         border-color: var(--main-color);
         outline: none;
-    }
+      }
     }
   }
 }

@@ -40,7 +40,7 @@ class AdminController extends Controller
         $user->birthday = $validated['user-birthday'];
         $user->phone = $validated['user-phone'];
         $user->email = $validated['user-email'];
-        $user->department_id = $validated['user-department'];
+        $validated['user-department'] =='not_changed'? null: $user->department_id = $validated['user-department'] ;
         $user->save();
         return redirect(route('user.show',['user'=>$user->id]));
     }

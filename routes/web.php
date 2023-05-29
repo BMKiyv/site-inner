@@ -10,6 +10,7 @@ use App\Http\Controllers\News\NewsController;
 use App\Http\Controllers\Projects\ProjectsController;
 use App\Http\Controllers\Photos\PhotosController;
 use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Search\SearchController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminDocumentsController;
 use App\Http\Controllers\Admin\AdminNewsController;
@@ -38,6 +39,7 @@ Route::delete('/events/{date}',[EventsController::class,'destroy']);
 Route::delete('/events/{id}/{date}',[EventsController::class,'destroyWithId']);
 Route::get('/documents/{folder}/{name}/download',[DocumentsController::class,'download'])->name('documents.download');
 Route::post('/documents/examples/upload',[DocumentsController::class, 'upload'])->name('documents.upload');
+Route::get('/search',[SearchController::class,'search'])->name('search');
 
 
 Route::resource('/departments', DepartmentsController::class);
