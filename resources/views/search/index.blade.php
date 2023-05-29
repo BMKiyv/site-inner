@@ -2,9 +2,9 @@
 @section('title','Пошук')
 @section('content')
     @foreach($users as $item)
-    <div>{{$item->name}}</div>
+    <a href="{{asset('/users').'/'.$item->name}}"><div>{{$item->name}}</div></a>
     @endforeach
     @foreach($departments as $item)
-    <div>{{$item->name}}</div>
+    <a href="{{asset('/departments').'/'.$item->name}}"><div>{{$item->name}}</div></a>
     @endforeach
 @endsection

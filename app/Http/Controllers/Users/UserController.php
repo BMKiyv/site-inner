@@ -28,4 +28,8 @@ class UserController extends Controller
         //dd($users);
         return view('cabinet.index',['users'=>$users]);
     }
+    public function show ($user) {
+        $user_obj = User::where('name', $user)->first();
+        return view('user.index',['user'=>$user_obj]);
+    }
 }

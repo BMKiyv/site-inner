@@ -41,7 +41,7 @@ Route::get('/documents/{folder}/{name}/download',[DocumentsController::class,'do
 Route::post('/documents/examples/upload',[DocumentsController::class, 'upload'])->name('documents.upload');
 Route::get('/search',[SearchController::class,'search'])->name('search');
 
-
+Route::resource('/users',UserController::class);
 Route::resource('/departments', DepartmentsController::class);
 Route::resource('/news', NewsController::class);
 Route::resource('/projects', ProjectsController::class);

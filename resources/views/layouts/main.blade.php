@@ -57,9 +57,9 @@
                 <div class="footer-item padding">Соцмережі</div>
                 <div class="footer-item-center">
                     <a href="https://www.facebook.com/DARTUkraine" class="footer-link"><img src="/images/icons/facebook.png" alt="facebook" class="footer-icon-center"></a>
-                    <a href="" class="footer-link"><img src="/images/icons/insta.png" alt="instagram" class="footer-icon-center"></a>
+                    <a href="/" class="footer-link"><img src="/images/icons/insta.png" alt="instagram" class="footer-icon-center"></a>
                     <a href="https://www.linkedin.com/company/dartukraine/" class="footer-link"><img src="/images/icons/linkedin.png" alt="linkedin" class="footer-icon-center"></a>
-                    <a href="" class="footer-link"><img src="/images/icons/t-net.png" alt="" class="footer-icon-center"></a>
+                    <a href="/" class="footer-link"><img src="/images/icons/t-net.png" alt="" class="footer-icon-center"></a>
                     <a href="https://m.youtube.com/@user-qm9kr1wt5j" class="footer-link"><img src="/images/icons/youtube.png" alt="youtube" class="footer-icon-center"></a>
                 </div>
             </div>
